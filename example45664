@@ -1,0 +1,58 @@
+#include<iostream>
+#include<vector>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+
+char vertices[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+char connections[][7] = {
+    {'B', 'D', 'G', 'H'},
+    {'A', 'D', 'H'},
+    {'D', 'E', 'G', 'H'},
+    {'A', 'B', 'C', 'F', 'G', 'H'},
+    {'C', 'F', 'G', 'H'},
+    {'D', 'E', 'G', 'H'},
+    {'A', 'C', 'D', 'E', 'F', 'H'},
+    {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
+};
+int giveMeARandomNumber() {
+    return (rand() % 8) + 65;
+}
+
+void findPath(char start, char end) {
+    int random_integer = giveMeARandomNumber();
+    cout << random_integer;
+    cout << start << " ";
+
+    if (start == end) {
+        cout << endl;
+        return;
+    }
+
+    for (int i = 0; i < sizeof(vertices); i++) {
+        if (start == vertices[i]) {
+            for (int j = 0; j < sizeof(connections[i]); j++) {
+                char connectedVertex = connections[i][j];
+                if (char(random_integer) == connections[i][j]) {
+                    findPath(connectedVertex, end);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+int main() {
+    char start, end;
+    cout << "Enter the start node: ";
+    cin >> start;
+    cout << "Enter the end node: ";
+    cin >> end;
+    start = toupper(start);
+    end = toupper(end);
+    srand((unsigned)time(0));
+
+    findPath(start, end);
+    return 0;
+}
