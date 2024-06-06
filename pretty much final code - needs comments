@@ -1,0 +1,99 @@
+#include<iostream>
+#include<vector>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+int globalCount = 0;
+string globalPrint = "";
+char globalTeacup;
+int globalWeight = 0;
+
+
+char vertices[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+char connections[][7] = {
+    {'B', 'D', 'G', 'H'},
+    {'A', 'D', 'H'},
+    {'D', 'E', 'G', 'H'},
+    {'A', 'B', 'C', 'F', 'G', 'H'},
+    {'C', 'F', 'G', 'H'},
+    {'D', 'E', 'G', 'H'},
+    {'A', 'C', 'D', 'E', 'F', 'H'},
+    {'A', 'B', 'C', 'D', 'E', 'F', 'G'}
+};
+
+int weights[][7] = {
+    {10, 12, 11, 4}, // A -> B, D, G, H
+    {10, 8, 20}, // B -> A, D, H
+    {17, 8, 13, 10}, // C -> D, E, G, H
+    {12, 8, 17, 16, 24, 14}, // D -> A, B, C, F, G, H
+    {8, 8, 11, 5}, // E -> C, F, G, H
+    {16, 8, 18, 21}, // F -> D, E, G, H
+    {11, 13, 24, 11, 18, 30}, // G -> A, C, D, E, F, H
+    {4, 20, 10, 14, 5, 21, 30} // H -> A, B, C, D, E, F, G
+};
+
+
+char giveMeARandomChar() { // just generates a random number and then turns it into a char from a - h
+    return char((rand() % 8) + 65);
+}
+
+void findPath(char start, char end) {
+    globalCount++; // this is good to have just so you know how inefficient it has been this time
+    char random_char1 = giveMeARandomChar();
+    // made a random number function - dont really need this but the random number stuff works so weird in this
+    cout << globalWeight << endl;
+
+    cout << start << " "; // print path
+    if (globalTeacup != start) {
+        globalPrint = globalPrint + start;
+        globalPrint = globalPrint + " --> ";
+    }
+
+    if (start == end) { // end if path found
+        cout << endl;
+        globalPrint.pop_back();
+        globalPrint.pop_back();
+        globalPrint.pop_back();
+        globalPrint.pop_back();
+        globalPrint.pop_back();
+        cout << "Final Results:" << endl;
+        cout << "Path: ";
+        cout << globalPrint << endl;
+        cout << "Weight: ";
+        cout << globalWeight << endl;
+        exit(0); // kill code once done
+    }
+    
+
+    for (int i = 0; i < sizeof(vertices); i++) { // look at the verticies array and 
+        if (start == vertices[i]) { // find the one which we are searching for
+            cout << "vertice " << vertices[i] << " located" << endl; // dont need these really but they are a nice
+            cout << "options available are " << connections[i] << endl; // visual cue as to whats happening
+            cout << globalCount << endl;
+            globalTeacup = start;
+
+            for (int p = 0; p < sizeof(connections[i]); p++) { // in the arrays corresponding to the links between the nodes
+                char t = connections[i][p]; // this was for the debugger - so that it creates a variable which can be tracked easily
+                if (connections[i][p] == random_char1) { // check if it happens to connect with the random char i have generated lol
+                    globalWeight = globalWeight + weights[i][p];
+                    findPath(connections[i][p], end); // if it matches then call this function - thats right baby its recursive 
+                } // with the new connection as the start variable - end remains the same obvs
+            }
+            findPath(start, end); // if nothing then simply call the function again so as to generate another random number
+        }
+    }
+}
+
+int main() {
+    char start, end;
+    cout << "Enter the start node: ";
+    cin >> start;
+    cout << "Enter the end node: ";
+    cin >> end;
+    start = toupper(start);
+    end = toupper(end);
+    srand((unsigned)time(0));
+    globalTeacup = '#';
+    findPath(start, end);
+    return 0;
+}
