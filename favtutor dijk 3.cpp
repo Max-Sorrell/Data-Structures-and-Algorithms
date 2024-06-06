@@ -1,6 +1,5 @@
 #include <iostream>
 #include <climits>
-#include <vector>
 
 using namespace std;
 
@@ -19,20 +18,11 @@ int miniDist(int distance[], bool Tset[], int size) // finding minimum distance
     return ind;
 }
 
-void printPath(vector<int> predecessors, int vertex) {
-    if (vertex == -1) {
-        return;
-    }
-    printPath(predecessors, predecessors[vertex]);
-    cout << (char)('A' + vertex) << " ";
-}
-
 void DijkstraAlgo(int graph[8][8], int src) // adjacency matrix 
 {
     int size = 8;
     int distance[8]; // array to calculate the minimum distance for each node                             
     bool Tset[8]; // boolean array to mark visited and unvisited for each node
-    vector<int> predecessors(size, -1); // array to store the predecessor of each node
 
     for (int k = 0; k < size; k++)
     {
@@ -52,20 +42,15 @@ void DijkstraAlgo(int graph[8][8], int src) // adjacency matrix
         {
             // updating the distance of neighbouring vertex
             if (!Tset[k] && graph[m][k] != -1 && distance[m] != INT_MAX && distance[m] + graph[m][k] < distance[k])
-            {
                 distance[k] = distance[m] + graph[m][k];
-                predecessors[k] = m;
-            }
         }
     }
 
-    cout << "Vertex\t\tDistance from source vertex\tPath" << endl;
+    cout << "Vertex\t\tDistance from source vertex" << endl;
     for (int k = 0; k < size; k++)
     {
-        char vertex = 65 + k; // Convert index to corresponding vertex letter
-        cout << vertex << "\t\t\t" << distance[k] << "\t\t\t";
-        printPath(predecessors, k);
-        cout << endl;
+        char str = 65 + k; // Convert index to corresponding vertex letter
+        cout << str << "\t\t\t" << distance[k] << endl;
     }
 }
 
