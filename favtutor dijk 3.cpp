@@ -70,6 +70,7 @@ int main() {
     char srcVertex;
     cout << "Enter the source vertex (A-H): ";
     cin >> srcVertex;
+    srcVertex = toupper(srcVertex);
 
     if (srcVertex < 'A' || srcVertex > 'H') {
         cout << "Invalid vertex. Please enter a vertex between A and H." << endl;
